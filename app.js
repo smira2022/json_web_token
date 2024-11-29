@@ -24,10 +24,16 @@ app.get("/user/validateToken", (req, res) => {
 
     const secret_key = 'supersecretkey';
 
-    const token =  req.header.authorization.split(' ')[1];
+    //Extract token from Authorization header
+    const token =  req.header('Authorization')?.split(' ')[1];
 
+    //If no token is provided
+    if(!token){
+        res.status(400).send("Token is missing");
+    }
 
     try {
+        //Verify the token
         const verified = jwt.verify(token, secret_key);
 
         if (verified){
@@ -43,7 +49,7 @@ app.get("/user/validateToken", (req, res) => {
 
 });
 
-
++
 app.listen(PORT, () => {
     console.log(`Connected to port ${PORT}`);
 });
